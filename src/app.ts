@@ -1,5 +1,5 @@
 import * as Discord from "discord.js"
-import * as commands from './commands.json'
+import * as commands from './config/commands.json'
 import { BaseResponder } from "./responders/BaseResponder"
 import { WarframeSheetResponder } from './responders/WarframeSheetResponder'
 
