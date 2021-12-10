@@ -20,7 +20,13 @@
   },
   "homepage": "https://github.com/Dcai169/Archive-Librarian#readme",
   "dependencies": {
+    "damerau-levenshtein": "^1.0.7",
     "discord.js": "^13.3.1",
+    "google-spreadsheet": "^3.2.0",
     "typescript": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/damerau-levenshtein": "^1.0.0",
+    "@types/google-spreadsheet": "^3.1.5"
   }
 }
