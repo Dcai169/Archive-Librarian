@@ -102,6 +102,9 @@ bot.on('interactionCreate', async interaction => {
 
                         case '724365082787708949': // Warframe Model Rips
                         case '705230123745542184': // The Library, FOR TESTING ONLY
+                            interaction.editReply('Reloading...')
+                            await warframeResponders.sheet.loadEntries()
+                            interaction.editReply('Reload complete.')
                             break
 
                         case '819709630540021810': // Halo Archive
