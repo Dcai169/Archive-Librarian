@@ -118,14 +118,34 @@ bot.on('interactionCreate', async interaction => {
 
                 case 'reload':
                     switch (interaction.guildId) { // Switch based on the server the command was sent from
+                        case '705230123745542184': // The Library, FOR TESTING ONLY
                         case '514059860489404417': // Destiny Model Rips
+                            switch (interaction.options.get('index')?.value as string) {
+                                case 'sheet':
+                                    interaction.editReply('Reloading Destiny sheet index...')
+                                    await destinyReponders.sheet.loadEntries()
+                                    interaction.editReply('Destiny sheet index reloaded.')
+                                    break;
+
+                                case 'community':
+                                    interaction.editReply('Reloading Destiny community index...')
+                                    await destinyReponders.drive.loadEntries()
+                                    interaction.editReply('Destiny community index reloaded.')
+                                    break;
+
+                                default:
+                                    interaction.editReply('Reloading all Destiny indexes...')
+                                    await destinyReponders.sheet.loadEntries()
+                                    await destinyReponders.drive.loadEntries()
+                                    interaction.editReply('Destiny indexes reloaded.')
+                                    break;
+                            }
                             break
 
                         case '671183775454986240': // Halo Model Resource
                             break
 
                         case '724365082787708949': // Warframe Model Rips
-                        case '705230123745542184': // The Library, FOR TESTING ONLY
                             interaction.editReply('Reloading...')
                             await warframeResponders.sheet.loadEntries()
                             interaction.editReply('Reload complete.')
