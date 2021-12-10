@@ -5,9 +5,11 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "strict": true,
+        "sourceMap": true,
 
         "noImplicitAny": true,
         "removeComments": true,
+        "resolveJsonModule": true,
 
         "baseUrl": ".",
         "outDir": "./dist",
