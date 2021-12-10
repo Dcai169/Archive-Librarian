@@ -3,7 +3,7 @@ import { Entry, warframeEntry } from '../types'
 import * as levenshtien from 'damerau-levenshtein'
 
 export class WarframeSheetResponder extends SheetResponder {
-  entries: warframeEntry[];
+  entries: warframeEntry[]
 
   constructor() {
     super('Warframe', '12GEPZuEBhQozCZjTTYMAQzK9iqAHuOC6zzr_cn5mi8o')
@@ -42,6 +42,7 @@ export class WarframeSheetResponder extends SheetResponder {
   }
   
   search(query: string): Entry[] {
+    if (this.loading) return []
     return this.entries.filter(WarframeSheetResponder.itemFilter, query)
   }
 
