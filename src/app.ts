@@ -1,4 +1,11 @@
 import * as Discord from "discord.js"
+import * as commands from './commands.json'
+import { BaseResponder } from "./responders/BaseResponder"
+import { WarframeSheetResponder } from './responders/WarframeSheetResponder'
+
+let warframeResponders = {
+    'sheet': new WarframeSheetResponder(),
+}
 
 // Create a new Discord client object
 const bot = new Discord.Client(
@@ -16,7 +23,7 @@ const bot = new Discord.Client(
 )
 
 // Login with the Discord Token
-bot.login(process.env.DISCORD_TOKEN).then((data) => { console.log(`Logged in as ${bot?.user?.tag}.`) })
+bot.login(process.env.DISCORD_TOKEN).then(() => { console.log(`Logged in as ${bot?.user?.tag}.`) })
 
 // Run once on the 'ready' event
 bot.once('ready', () => {
@@ -34,12 +41,14 @@ bot.once('ready', () => {
         },
     ]
 
+    // Set global commands
     bot.application?.commands.set(globalCommandDefinitions)
-    // bot.guilds.cache.get('705230123745542184')?.commands.set(globalCommandDefinitions) // FOR TESTING ONLY
-
     console.log('Global commands set.')
 
     // Set guild commands
+    Object.entries(commands).forEach(([guildId, guildCommands]) => {
+        bot.guilds.cache.get(guildId)?.commands.set((guildCommands as Discord.ApplicationCommandDataResolvable[]))
+    });
     console.log('Guild commands set.')
 
     console.log('Commands ready!')
@@ -50,7 +59,7 @@ bot.on('interactionCreate', async interaction => {
     if (interaction.isCommand()) {
         try {
             // Defer the reply until command execution is complete
-            await interaction.deferReply() 
+            await interaction.deferReply()
 
             switch (interaction.commandName) { // Switch based on the command name
                 case 'about':
@@ -71,6 +80,7 @@ bot.on('interactionCreate', async interaction => {
 
                         case '724365082787708949': // Warframe Model Rips
                         case '705230123745542184': // The Library, FOR TESTING ONLY
+                            interaction.editReply(warframeResponders.sheet.generateResponse(warframeResponders.sheet.search(interaction.options.get('query')?.value as string), BaseResponder.generateResponseLine));
                             break
 
                         case '819709630540021810': // Halo Archive
