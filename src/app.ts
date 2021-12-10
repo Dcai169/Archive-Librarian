@@ -1,10 +1,16 @@
 import * as Discord from "discord.js"
 import * as commands from './config/commands.json'
+import { DestinyClassUnion, GenderUnion } from "./types"
 import { BaseResponder } from "./responders/BaseResponder"
+import { DestinySheetResponder } from "./responders/DestinySheetResponder"
 import { WarframeSheetResponder } from './responders/WarframeSheetResponder'
 
 let warframeResponders = {
     'sheet': new WarframeSheetResponder(),
+}
+
+let destinyReponders = {
+    'sheet': new DestinySheetResponder(),
 }
 
 // Create a new Discord client object
@@ -72,14 +78,32 @@ bot.on('interactionCreate', async interaction => {
 
                 case 'search':
                     switch (interaction.guildId) { // Switch based on the server the command was sent from
+                        case '705230123745542184': // The Library, FOR TESTING ONLY
                         case '514059860489404417': // Destiny Model Rips
+                            switch (interaction.options.getSubcommand()) {
+                                case 'sheet':
+                                    let options = {
+                                        armorClass: (interaction.options.get('class')?.value as typeof DestinyClassUnion | undefined),
+                                        gender: (interaction.options.get('gender')?.value as typeof GenderUnion | undefined)
+                                    }
+
+                                    interaction.editReply(destinyReponders.sheet.generateResponse(destinyReponders.sheet.search(interaction.options.get('query')?.value as string, options), BaseResponder.generateResponseLine))
+                                    break;
+
+                                case 'community':
+
+                                    break;
+                            
+                                default:
+                                    interaction.editReply('Invalid subcommand. Use `/search sheet` or `/search community`.')
+                                    break;
+                            }
                             break
 
                         case '671183775454986240': // Halo Model Resource
                             break
 
                         case '724365082787708949': // Warframe Model Rips
-                        case '705230123745542184': // The Library, FOR TESTING ONLY
                             interaction.editReply(warframeResponders.sheet.generateResponse(warframeResponders.sheet.search(interaction.options.get('query')?.value as string), BaseResponder.generateResponseLine));
                             break
 
