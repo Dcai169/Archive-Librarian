@@ -3,6 +3,7 @@ import * as commands from "./config/commands.json"
 import { BaseResponder } from "./responders/BaseResponder"
 import { DestinyDriveResponder } from "./responders/DestinyDriveResponder"
 import { DestinySheetResponder } from "./responders/DestinySheetResponder"
+import { HaloSheetResponder } from "./responders/HaloSheetResponder"
 import { WarframeSheetResponder } from "./responders/WarframeSheetResponder"
 import { DestinyClassUnion, GenderUnion } from "./types"
 
@@ -13,6 +14,10 @@ let warframeResponders = {
 let destinyReponders = {
     'sheet': new DestinySheetResponder(),
     'drive': new DestinyDriveResponder(),
+}
+
+let haloResponders = {
+    'sheet': new HaloSheetResponder(),
 }
 
 // Create a new Discord client object
