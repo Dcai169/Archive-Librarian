@@ -123,6 +123,13 @@
     "halo": [
         {
             "replaces": [
+                "chief",
+                "mc"
+            ],
+            "replacement": "Master Chief"
+        },
+        {
+            "replaces": [
                 "craig"
             ],
             "replacement": "Brute"
