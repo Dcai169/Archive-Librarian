@@ -5,9 +5,6 @@ export abstract class BaseResponder {
     // creates instance fields implicitly
     constructor(readonly game: string, loading = false) { }
 
-    // load entries 
-    abstract loadEntries(): void
-
     // search indexes for provided query
     abstract search(query: string, options?: { [key: string]: string }): Entry[]
 

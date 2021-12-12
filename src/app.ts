@@ -12,6 +12,7 @@ let warframeResponders = {
 
 let destinyReponders = {
     'sheet': new DestinySheetResponder(),
+    'drive': new DestinyDriveResponder(),
 }
 
 // Create a new Discord client object
@@ -64,10 +65,10 @@ bot.once('ready', async () => {
 // Handle interactions with Discord
 bot.on('interactionCreate', async interaction => {
     if (interaction.isCommand()) {
+        await interaction.deferReply()
+
         try {
             // Defer the reply until command execution is complete
-            await interaction.deferReply()
-
             switch (interaction.commandName) { // Switch based on the command name
                 case 'about':
                     interaction.editReply('I am the Archive Librarian. Use the \`search\` command to search my archives. I was created by <@191624702614175744>.')
@@ -81,9 +82,10 @@ bot.on('interactionCreate', async interaction => {
                     switch (interaction.guildId) { // Switch based on the server the command was sent from
                         case '705230123745542184': // The Library, FOR TESTING ONLY
                         case '514059860489404417': // Destiny Model Rips
+                            let options = {}
                             switch (interaction.options.getSubcommand()) {
                                 case 'sheet':
-                                    let options = {
+                                    options = {
                                         armorClass: (interaction.options.get('class')?.value as typeof DestinyClassUnion | undefined),
                                         gender: (interaction.options.get('gender')?.value as typeof GenderUnion | undefined)
                                     }
@@ -92,9 +94,14 @@ bot.on('interactionCreate', async interaction => {
                                     break;
 
                                 case 'community':
+                                    options = {
+                                        armorClass: (interaction.options.get('class')?.value as typeof DestinyClassUnion | undefined),
+                                        gender: (interaction.options.get('gender')?.value as typeof GenderUnion | undefined)
+                                    }
 
+                                    interaction.editReply(destinyReponders.drive.generateResponse(destinyReponders.drive.search(interaction.options.get('query')?.value as string, options), BaseResponder.generateResponseLine))
                                     break;
-                            
+
                                 default:
                                     interaction.editReply('Invalid subcommand. Use `/search sheet` or `/search community`.')
                                     break;
@@ -130,14 +137,14 @@ bot.on('interactionCreate', async interaction => {
 
                                 case 'community':
                                     interaction.editReply('Reloading Destiny community index...')
-                                    await destinyReponders.drive.loadEntries()
+                                    await destinyReponders.drive.loadEntries('14Ry-piQtH3j6MlfoVLfFfu98c4pcTJUb', '')
                                     interaction.editReply('Destiny community index reloaded.')
                                     break;
 
                                 default:
                                     interaction.editReply('Reloading all Destiny indexes...')
                                     await destinyReponders.sheet.loadEntries()
-                                    await destinyReponders.drive.loadEntries()
+                                    await destinyReponders.drive.loadEntries('14Ry-piQtH3j6MlfoVLfFfu98c4pcTJUb', '')
                                     interaction.editReply('Destiny indexes reloaded.')
                                     break;
                             }
