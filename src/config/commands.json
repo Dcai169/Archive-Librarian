@@ -107,6 +107,7 @@
         {
             "name": "reload",
             "description": "Reload cached results",
+            "defaultPermission": false,
             "options": [
                 {
                     "name": "index",
@@ -144,7 +145,8 @@
         },
         {
             "name": "reload",
-            "description": "Reload cached results"
+            "description": "Reload cached results",
+            "defaultPermission": false
         }
     ],
     "671183775454986240": [
@@ -222,7 +224,8 @@
         },
         {
             "name": "reload",
-            "description": "Reload cached results"
+            "description": "Reload cached results",
+            "defaultPermission": false
         }
     ],
     "514059860489404417": [
@@ -332,7 +335,28 @@
         },
         {
             "name": "reload",
-            "description": "Reload cached results"
+            "description": "Reload cached results",
+            "defaultPermission": false,
+            "options": [
+                {
+                    "name": "index",
+                    "type": "STRING",
+                    "description": "The index to reload. If not specified, all indexes will be reloaded.",
+                    "required": false,
+                    "choices": [
+                        {
+                            "name": "Sheet",
+                            "value": "sheet",
+                            "description": "Reload cached sheet results"
+                        },
+                        {
+                            "name": "Community",
+                            "value": "community",
+                            "description": "Reload cached community results"
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

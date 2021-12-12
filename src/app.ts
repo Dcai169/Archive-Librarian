@@ -56,6 +56,20 @@ bot.once('ready', async () => {
     // Set guild commands
     Object.entries(commands).forEach(async ([guildId, guildCommands]) => {
         await bot.guilds.cache.get(guildId)?.commands.set((guildCommands as Discord.ApplicationCommandDataResolvable[]))
+        await bot.guilds.cache.get(guildId)?.commands.cache.at(1)?.permissions.add({ // Allow Alcidine#5154 and the server owner to use the reload command
+            permissions: [
+                {
+                    id: '191624702614175744',
+                    type: 'USER',
+                    permission: true
+                },
+                {
+                    id: bot.guilds.cache.get(guildId)?.ownerId as string,
+                    type: 'USER',
+                    permission: true
+                }
+            ]
+        })
     });
     console.log('Guild commands set.')
 
