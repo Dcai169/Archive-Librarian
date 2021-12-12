@@ -1,5 +1,5 @@
-import { BaseResponder } from "./BaseResponder"
 import { GoogleSpreadsheet } from "google-spreadsheet"
+import { BaseResponder } from "./BaseResponder"
 
 export abstract class SheetResponder extends BaseResponder {
 
@@ -22,4 +22,7 @@ export abstract class SheetResponder extends BaseResponder {
 
         return doc
     }
+
+    // load entries 
+    abstract loadEntries(): void
 }

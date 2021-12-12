@@ -41,16 +41,16 @@ export class WarframeSheetResponder extends SheetResponder {
     return levenshtien(this.toLowerCase(), item.name.toLowerCase()).similarity > 0.7
   }
   
-  search(query: string): Entry[] {
+  search(query: string): warframeEntry[] {
     if (this.loading) return []
     return this.entries.filter(WarframeSheetResponder.itemFilter, query)
   }
 
-  generateFullyQualifiedName(entry: Entry): string {
+  generateFullyQualifiedName(entry: warframeEntry): string {
     return `${entry.name}`.trim()
   }
 
-  generateResponse(matchingEntries: Entry[], generateResponseLine: (entry: Entry, name: string) => string): string {
+  generateResponse(matchingEntries: warframeEntry[], generateResponseLine: (entry: Entry, name: string) => string): string {
     return super.generateResponse(matchingEntries, generateResponseLine)
   }
 }
