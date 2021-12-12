@@ -1,14 +1,14 @@
+import * as levenshtien from 'damerau-levenshtein';
 import { GoogleSpreadsheetWorksheet } from "google-spreadsheet";
-import { destinyEntry, Entry, GenderUnion, DestinyClassUnion } from "src/types";
-import { SheetResponder } from "./SheetResponder";
-import * as levenshtien from 'damerau-levenshtein'
-import { destiny } from '../config/query_overrides.json'
+import { DestinyClassUnion, destinyEntry, Entry, GenderUnion } from "src/types";
+import { destiny } from '../config/query_overrides.json';
 import { BaseResponder } from "./BaseResponder";
+import { SheetResponder } from "./SheetResponder";
 
 export class DestinySheetResponder extends SheetResponder {
     entries: Map<string, destinyEntry[]>;
 
-    constructor(){
+    constructor() {
         super('Destiny', '18-pxaUaUvYxACE5uMveCE9_bewwhfbd93ZaLIyP_rxQ');
 
         this.entries = new Map([
@@ -27,7 +27,7 @@ export class DestinySheetResponder extends SheetResponder {
             ['titanArmor', []],
             ['warlockArmor', []],
             ['elseItems', []]
-        ]); 
+        ]);
 
         function createBasicEntry(sheet: GoogleSpreadsheetWorksheet, row: number): destinyEntry {
             return {
@@ -81,7 +81,7 @@ export class DestinySheetResponder extends SheetResponder {
                         (this.entries.get('warlockArmor') as destinyEntry[]).push(entry)
                     }
                     break;
-            
+
                 default:
                     for (let row = 0; row < sheet.rowCount; row++) {
                         if (sheet.getCell(row, 0).effectiveFormat?.textFormat.fontSize as number >= this.headerFontSize) continue; // skip headers
@@ -102,7 +102,7 @@ export class DestinySheetResponder extends SheetResponder {
     }
 
     search(query: string, options?: { gender?: typeof GenderUnion, armorClass?: typeof DestinyClassUnion }): destinyEntry[] {
-        if (this.loading) return [];
+        if (this.loading) return []; // If the loading semaphore is set, return no results
         let results: destinyEntry[] = []
 
         destiny.forEach((overridePair) => {
@@ -122,15 +122,11 @@ export class DestinySheetResponder extends SheetResponder {
         if (options?.gender) { // filter by gender if specified
             results = results.filter((item) => { return !item.gender || item.gender === options.gender });
         }
-        
+
         return results
     }
 
     generateFullyQualifiedName(entry: destinyEntry): string {
         return `${(entry.gender ? `${BaseResponder.capitalizeWord(entry.gender)} ` : '')}${(entry.armorClass ? `${BaseResponder.capitalizeWord(entry.armorClass)} ` : '')}${entry.name}`
-    }
-
-    generateResponse(matchingEntries: destinyEntry[], generateResponseLine: (entry: Entry, name: string) => string): string {
-        return super.generateResponse(matchingEntries, generateResponseLine)
     }
 }
