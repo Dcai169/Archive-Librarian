@@ -1,9 +1,10 @@
 import * as Discord from "discord.js"
-import * as commands from './config/commands.json'
-import { DestinyClassUnion, GenderUnion } from "./types"
+import * as commands from "./config/commands.json"
 import { BaseResponder } from "./responders/BaseResponder"
+import { DestinyDriveResponder } from "./responders/DestinyDriveResponder"
 import { DestinySheetResponder } from "./responders/DestinySheetResponder"
-import { WarframeSheetResponder } from './responders/WarframeSheetResponder'
+import { WarframeSheetResponder } from "./responders/WarframeSheetResponder"
+import { DestinyClassUnion, GenderUnion } from "./types"
 
 let warframeResponders = {
     'sheet': new WarframeSheetResponder(),
@@ -32,7 +33,7 @@ const bot = new Discord.Client(
 bot.login(process.env.DISCORD_TOKEN).then(() => { console.log(`Logged in as ${bot?.user?.tag}.`) })
 
 // Run once on the 'ready' event
-bot.once('ready', () => {
+bot.once('ready', async () => {
     console.log('Connected to Discord.')
 
     // Set global commands
@@ -48,12 +49,12 @@ bot.once('ready', () => {
     ]
 
     // Set global commands
-    bot.application?.commands.set(globalCommandDefinitions)
+    await bot.application?.commands.set(globalCommandDefinitions)
     console.log('Global commands set.')
 
     // Set guild commands
-    Object.entries(commands).forEach(([guildId, guildCommands]) => {
-        bot.guilds.cache.get(guildId)?.commands.set((guildCommands as Discord.ApplicationCommandDataResolvable[]))
+    Object.entries(commands).forEach(async ([guildId, guildCommands]) => {
+        await bot.guilds.cache.get(guildId)?.commands.set((guildCommands as Discord.ApplicationCommandDataResolvable[]))
     });
     console.log('Guild commands set.')
 
