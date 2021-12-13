@@ -98,10 +98,9 @@ bot.on('interactionCreate', async interaction => {
                     break
 
                 case 'search':
+                    let options = {}
                     switch (interaction.guildId) { // Switch based on the server the command was sent from
-                        case '705230123745542184': // The Library, FOR TESTING ONLY
                         case '514059860489404417': // Destiny Model Rips
-                            let options = {}
                             switch (interaction.options.getSubcommand()) {
                                 case 'sheet':
                                     options = {
@@ -127,14 +126,14 @@ bot.on('interactionCreate', async interaction => {
                             }
                             break
 
+                        case '705230123745542184': // The Library, FOR TESTING ONLY
+                        case '819709630540021810': // Halo Archive
                         case '671183775454986240': // Halo Model Resource
+                            interaction.editReply(haloResponders.sheet.generateResponse(haloResponders.sheet.search(interaction.options.get('query')?.value as string, { game: interaction.options.get('game')?.value as string }), BaseResponder.generateResponseLine))
                             break
 
                         case '724365082787708949': // Warframe Model Rips
                             interaction.editReply(warframeResponders.sheet.generateResponse(warframeResponders.sheet.search(interaction.options.get('query')?.value as string), BaseResponder.generateResponseLine));
-                            break
-
-                        case '819709630540021810': // Halo Archive
                             break
 
                         default:
@@ -145,7 +144,6 @@ bot.on('interactionCreate', async interaction => {
 
                 case 'reload':
                     switch (interaction.guildId) { // Switch based on the server the command was sent from
-                        case '705230123745542184': // The Library, FOR TESTING ONLY
                         case '514059860489404417': // Destiny Model Rips
                             switch (interaction.options.get('index')?.value as string) {
                                 case 'sheet':
@@ -169,16 +167,18 @@ bot.on('interactionCreate', async interaction => {
                             }
                             break
 
+                        case '705230123745542184': // The Library, FOR TESTING ONLY
                         case '671183775454986240': // Halo Model Resource
+                        case '819709630540021810': // Halo Archive
+                            interaction.editReply('Reloading Halo sheet index...')
+                            await haloResponders.sheet.loadEntries()
+                            interaction.editReply('Halo sheet index reloaded.')
                             break
 
                         case '724365082787708949': // Warframe Model Rips
                             interaction.editReply('Reloading...')
                             await warframeResponders.sheet.loadEntries()
                             interaction.editReply('Reload complete.')
-                            break
-
-                        case '819709630540021810': // Halo Archive
                             break
 
                         default:
