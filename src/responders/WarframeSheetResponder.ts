@@ -37,7 +37,7 @@ export class WarframeSheetResponder extends SheetResponder {
   }
 
   // filter items by Levenshtein distance
-  static itemFilter(this: string, item: Entry): boolean {
+  static itemFilter(this: string, item: warframeEntry): boolean {
     return levenshtien(this.toLowerCase(), item.name.toLowerCase()).similarity > 0.7
   }
   

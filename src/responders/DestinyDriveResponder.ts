@@ -75,7 +75,7 @@ export class DestinyDriveResponder extends DriveResponder {
         return Promise.resolve()
     }
 
-    static itemFilter(this: string, item: Entry): boolean {
+    static itemFilter(this: string, item: destinyEntry): boolean {
         return levenshtien(this.toLowerCase(), item.name.toLowerCase()).similarity > 0.7
     }
 
