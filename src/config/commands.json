@@ -82,6 +82,89 @@
             "defaultPermission": false
         }
     ],
+    "819709630540021810": [
+        {
+            "name": "search",
+            "description": "Search Halo Models",
+            "options": [
+                {
+                    "name": "query",
+                    "type": "STRING",
+                    "description": "The query to search for.",
+                    "required": true
+                },
+                {
+                    "name": "game",
+                    "type": "STRING",
+                    "description": "The game to filter by.",
+                    "required": false,
+                    "choices": [
+                        {
+                            "name": "Halo CE",
+                            "value": "Halo CE"
+                        },
+                        {
+                            "name": "Halo CEA",
+                            "value": "Halo CEA"
+                        },
+                        {
+                            "name": "Halo 2 Classic",
+                            "value": "Halo 2 Classic"
+                        },
+                        {
+                            "name": "Halo 2 Anniversary",
+                            "value": "Halo 2 Anniversary"
+                        },
+                        {
+                            "name": "Halo 2 A Multiplayer",
+                            "value": "Halo 2 A Multiplayer"
+                        },
+                        {
+                            "name": "Halo 3",
+                            "value": "Halo 3"
+                        },
+                        {
+                            "name": "Halo 3: ODST",
+                            "value": "Halo 3: ODST"
+                        },
+                        {
+                            "name": "Halo Reach",
+                            "value": "Halo Reach"
+                        },
+                        {
+                            "name": "Halo 4",
+                            "value": "Halo 4"
+                        },
+                        {
+                            "name": "Halo 5",
+                            "value": "Halo 5"
+                        },
+                        {
+                            "name": "Halo Wars",
+                            "value": "Halo Wars"
+                        },
+                        {
+                            "name": "Halo Wars 2",
+                            "value": "Halo Wars 2"
+                        },
+                        {
+                            "name": "Halo: Spartan Strike",
+                            "value": "Halo: Spartan Strike"
+                        },
+                        {
+                            "name": "Halo Infinite",
+                            "value": "Halo Infinite"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "reload",
+            "description": "Reload cached results",
+            "defaultPermission": false
+        }
+    ],
     "724365082787708949": [
         {
             "name": "search",
