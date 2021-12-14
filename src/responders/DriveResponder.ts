@@ -1,6 +1,12 @@
 import { google } from "googleapis";
-import * as clientSecret from "./../config/client_secret.json";
 import { BaseResponder } from "./BaseResponder";
+let clientSecret;
+
+try {
+    clientSecret = require("./../config/client_secret.json");
+} catch (e) {
+    clientSecret = JSON.parse(process.env.GOOGLE_CLIENT_SECRET as string);
+}
 
 const scopes = ['https://www.googleapis.com/auth/drive']
 
