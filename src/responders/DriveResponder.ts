@@ -11,11 +11,13 @@ export const drive = google.drive({
 
 export abstract class DriveResponder extends BaseResponder {
     rootFolderId: string;
+    quotaTimeoutms: number;
 
     constructor(game: string, rootFolderId: string) {
         super(game);
         this.rootFolderId = rootFolderId;
+        this.quotaTimeoutms = 400;
     }
 
-    abstract loadEntries(parentFolderId: string, folderId: string): Promise<void>;
+    abstract loadEntries(parentFolderId: string, parentFolderName: string): Promise<void>;
 }
