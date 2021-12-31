@@ -125,6 +125,12 @@
                 "aurash"
             ],
             "replacement": "Oryx, the Taken King"
+        },
+        {
+            "replaces": [
+                "filo"
+            ],
+            "replacement": "First In, Last Out"
         }
     ],
     "halo": [
