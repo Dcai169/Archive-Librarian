@@ -118,6 +118,13 @@
                 "space of aids"
             ],
             "replacement": "Ace of Spades"
+        },
+        {
+            "replaces": [
+                "oryx",
+                "aurash"
+            ],
+            "replacement": "Oryx, the Taken King"
         }
     ],
     "halo": [
