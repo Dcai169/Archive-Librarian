@@ -46,8 +46,12 @@ export class HaloSheetResponder extends SheetResponder {
         return Promise.resolve();
     }
 
+    static normalizeName(name: string): string {
+        return name.replace('w/ permutations', '').trim();
+    }
+
     static itemFilter(this: string, item: haloEntry): boolean {
-        return levenshtien(this.toLowerCase(), item.name.toLowerCase()).similarity > 0.7
+        return levenshtien(this.toLowerCase(), HaloSheetResponder.normalizeName(item.name.toLowerCase())).similarity > 0.7
     }
 
     search(query: string, options?: { game?: string; }): haloEntry[] {

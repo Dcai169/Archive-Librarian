@@ -1,11 +1,12 @@
 import * as Discord from "discord.js"
-import * as commands from "./config/commands.json"
+import * as guildCommands from "./config/commands.json"
 import { BaseResponder } from "./responders/BaseResponder"
 import { DestinyDriveResponder } from "./responders/DestinyDriveResponder"
 import { DestinySheetResponder } from "./responders/DestinySheetResponder"
 import { HaloSheetResponder } from "./responders/HaloSheetResponder"
 import { WarframeSheetResponder } from "./responders/WarframeSheetResponder"
 import { DestinyClassUnion, GenderUnion } from "./types"
+import { version } from './../package.json';
 
 let warframeResponders = {
     'sheet': new WarframeSheetResponder(),
@@ -20,6 +21,50 @@ let haloResponders = {
     'sheet': new HaloSheetResponder(),
 }
 
+function guildIdToName(guildId: string): string {
+    switch (guildId) {
+        case '705230123745542184':
+            return 'the Library';
+
+        case '819709630540021810':
+            return 'the Halo Archive';
+
+        case '724365082787708949':
+            return 'WMR';
+
+        case '671183775454986240':
+            return 'HMR';
+
+        case '514059860489404417':
+            return 'DMR';
+
+        default:
+            return '';
+    }
+}
+
+function getPriviligedGuildRoleId(guildId: string): string {
+    switch (guildId) {
+        case '705230123745542184':
+            return '787155673913491456';
+
+        case '819709630540021810':
+            return '819719515830616117';
+
+        case '724365082787708949':
+            return '724372990825070672';
+
+        case '671183775454986240':
+            return '671428754081316865';
+
+        case '514059860489404417':
+            return '514548453121064965';
+
+        default:
+            return '';
+    }
+}
+
 // Create a new Discord client object
 const bot = new Discord.Client(
     {
@@ -28,7 +73,7 @@ const bot = new Discord.Client(
             afk: false,
             activities: [{
                 type: "PLAYING",
-                name: "with code",
+                name: `v${version}`,
             }]
         },
         intents: ['GUILDS']
@@ -59,24 +104,28 @@ bot.once('ready', async () => {
     console.log('Global commands set.')
 
     // Set guild commands
-    Object.entries(commands).forEach(async ([guildId, guildCommands]) => {
-        await bot.guilds.cache.get(guildId)?.commands.set((guildCommands as Discord.ApplicationCommandDataResolvable[]))
-        await bot.guilds.cache.get(guildId)?.commands.cache.at(1)?.permissions.add({ // Allow Alcidine#5154 and the server owner to use the reload command
-            permissions: [
-                {
-                    id: '191624702614175744',
-                    type: 'USER',
-                    permission: true
-                },
-                {
-                    id: bot.guilds.cache.get(guildId)?.ownerId as string,
-                    type: 'USER',
-                    permission: true
-                }
-            ]
-        })
+    Object.entries(guildCommands).forEach(async ([guildId, guildCommands]) => {
+        let commandMap = await bot.guilds.cache.get(guildId)?.commands.set((guildCommands as Discord.ApplicationCommandDataResolvable[]))
+        console.log(`Guild commands set for ${guildIdToName(guildId)}.`)
+        if (commandMap) {
+            let privilegedUsers = ['191624702614175744', commandMap.get('918761548837703691')?.guild?.ownerId as string] // Allow Alcidine#5154, the server owner, and admins to use the /reload command
+                // .concat((getPriviligedGuildRoleId(guildId) ? commandMap.first()?.guild?.roles.cache.get(getPriviligedGuildRoleId(guildId))?.members.map(member => member.id) ?? [] : []));
+            
+            await commandMap.get('918761548837703691')?.permissions.add({ 
+                permissions: privilegedUsers.map(userId => {
+                    return {
+                        id: userId,
+                        type: 'USER',
+                        permission: true
+                    }
+                })
+            });
+
+            console.log(`/reload permission set on ${guildIdToName(guildId)}.`)
+        } else {
+            console.log(`Error setting /reload permissions on ${guildIdToName(guildId)}.`)
+        }
     });
-    console.log('Guild commands set.')
 
     console.log('Commands ready!')
 })
@@ -90,7 +139,7 @@ bot.on('interactionCreate', async interaction => {
             // Defer the reply until command execution is complete
             switch (interaction.commandName) { // Switch based on the command name
                 case 'about':
-                    interaction.editReply('I am the Archive Librarian. Use the \`search\` command to search my archives. I was created by <@191624702614175744>.')
+                    interaction.editReply('I am the Archive Librarian. Use the \`\/search\` command to search my archives. I was created by <@191624702614175744>.')
                     break
 
                 case 'source':
@@ -100,6 +149,7 @@ bot.on('interactionCreate', async interaction => {
                 case 'search':
                     let options = {}
                     switch (interaction.guildId) { // Switch based on the server the command was sent from
+                        case '705230123745542184': // The Library, FOR TESTING ONLY
                         case '514059860489404417': // Destiny Model Rips
                             switch (interaction.options.getSubcommand()) {
                                 case 'sheet':
@@ -126,7 +176,6 @@ bot.on('interactionCreate', async interaction => {
                             }
                             break
 
-                        case '705230123745542184': // The Library, FOR TESTING ONLY
                         case '819709630540021810': // Halo Archive
                         case '671183775454986240': // Halo Model Resource
                             interaction.editReply(haloResponders.sheet.generateResponse(haloResponders.sheet.search(interaction.options.get('query')?.value as string, { game: interaction.options.get('game')?.value as string }), BaseResponder.generateResponseLine))
@@ -144,6 +193,7 @@ bot.on('interactionCreate', async interaction => {
 
                 case 'reload':
                     switch (interaction.guildId) { // Switch based on the server the command was sent from
+                        case '705230123745542184': // The Library, FOR TESTING ONLY
                         case '514059860489404417': // Destiny Model Rips
                             switch (interaction.options.get('index')?.value as string) {
                                 case 'sheet':
@@ -167,7 +217,6 @@ bot.on('interactionCreate', async interaction => {
                             }
                             break
 
-                        case '705230123745542184': // The Library, FOR TESTING ONLY
                         case '671183775454986240': // Halo Model Resource
                         case '819709630540021810': // Halo Archive
                             interaction.editReply('Reloading Halo sheet index...')

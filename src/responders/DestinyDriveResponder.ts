@@ -4,6 +4,7 @@ import { destiny } from '../config/query_overrides.json';
 import { BaseResponder } from "./BaseResponder";
 import { drive, DriveResponder } from "./DriveResponder";
 
+const COMMA_SPLIT_WHITELIST = ['first in', 'yes', 'spinning', 'unseeing', 'alone', 'unhearing', 'beggar', 'unloved', 'broken bird', 'defenseless', 'charmed'];
 export class DestinyDriveResponder extends DriveResponder {
     entries: Map<string, destinyEntry[]>;
 
@@ -75,8 +76,14 @@ export class DestinyDriveResponder extends DriveResponder {
         return Promise.resolve()
     }
 
+    static handleCommas(name: string): string {
+        if (!name.includes(',')) return name;
+        let subject = name.split(',')[0];
+        return (COMMA_SPLIT_WHITELIST.includes(subject) ? name : subject)
+    }
+
     static itemFilter(this: string, item: destinyEntry): boolean {
-        return levenshtien(this.toLowerCase(), item.name.toLowerCase()).similarity > 0.7
+        return levenshtien(this.toLowerCase(), DestinyDriveResponder.handleCommas(item.name.toLowerCase())).similarity > 0.7
     }
 
     search(query: string, options?: { gender?: typeof GenderUnion, armorClass?: typeof DestinyClassUnion }): destinyEntry[] {
