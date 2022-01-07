@@ -6,6 +6,7 @@ import { DestinySheetResponder } from "./responders/DestinySheetResponder"
 import { HaloSheetResponder } from "./responders/HaloSheetResponder"
 import { WarframeSheetResponder } from "./responders/WarframeSheetResponder"
 import { DestinyClassUnion, GenderUnion } from "./types"
+import { version } from './../package.json';
 
 let warframeResponders = {
     'sheet': new WarframeSheetResponder(),
@@ -72,7 +73,7 @@ const bot = new Discord.Client(
             afk: false,
             activities: [{
                 type: "PLAYING",
-                name: "with code",
+                name: `v${version}`,
             }]
         },
         intents: ['GUILDS']
