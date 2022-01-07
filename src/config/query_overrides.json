@@ -121,10 +121,9 @@
         },
         {
             "replaces": [
-                "oryx",
                 "aurash"
             ],
-            "replacement": "Oryx, the Taken King"
+            "replacement": "Oryx"
         },
         {
             "replaces": [
@@ -153,6 +152,12 @@
                 "hog"
             ],
             "replacement": "Warthog"
+        },
+        {
+            "replaces": [
+                "noob cube"
+            ],
+            "replacement": "Fusion Coil"
         }
     ],
     "warframe": [
